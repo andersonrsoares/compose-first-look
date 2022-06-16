@@ -20,7 +20,7 @@ class WeatherRepository @Inject constructor(
     override suspend fun fetchWeatherByCity(cityName: String): Flow<DataState<Weather>> {
         return flow {
 
-            emit(DataState.Loading<Weather>())
+            emit(DataState.Loading())
 
             emit(when(val result = weatherRemoteDataSource.findWeatherByCity(cityName)) {
                 is RemoteDataSourceResult.Success -> DataState.Success(result.data.toWeather())

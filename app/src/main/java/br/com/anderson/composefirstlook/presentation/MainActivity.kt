@@ -12,9 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import br.com.anderson.composefirstlook.presentation.weather_search.WeatherViewModel
 import br.com.anderson.composefirstlook.ui.theme.MyApplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -37,7 +40,6 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launchWhenCreated {
             viewModel.onWeatherSearchClick("");
         }
-
     }
 }
 
