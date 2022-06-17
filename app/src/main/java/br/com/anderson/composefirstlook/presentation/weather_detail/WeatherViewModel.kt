@@ -1,4 +1,4 @@
-package br.com.anderson.composefirstlook.presentation.weather_search
+package br.com.anderson.composefirstlook.presentation.weather_detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
