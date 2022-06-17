@@ -18,10 +18,10 @@ class WeatherRemoteDataSource @Inject constructor(
              if (response.isSuccessful) {
                  RemoteDataSourceResult.Success(response.body()!!)
              } else {
-               RemoteDataSourceResult.Error(null, RemoteDataSourceError.General("error"))
+               RemoteDataSourceResult.Error(RemoteDataSourceError.General("error"))
             }
         } catch (e:Throwable) {
-              RemoteDataSourceResult.Error<WeatherContentDto>(null, RemoteDataSourceError.General(e.message))
+              RemoteDataSourceResult.Error(RemoteDataSourceError.General(e.message))
         }
     }
 }

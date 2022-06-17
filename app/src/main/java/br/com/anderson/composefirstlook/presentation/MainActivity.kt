@@ -18,6 +18,13 @@ import br.com.anderson.composefirstlook.ui.theme.MyApplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import br.com.anderson.composefirstlook.presentation.weather_search.WeatherSearchDestination
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -28,17 +35,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyApplicationTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    Greeting("Android")
-                }
+//                Surface(
+//                    modifier = Modifier.fillMaxSize(),
+//                    color = MaterialTheme.colors.background
+//                ) {
+//                    Greeting("Android")
+//                }
+                WeatherApp()
             }
-        }
-
-        lifecycleScope.launchWhenCreated {
-            viewModel.onWeatherSearchClick("");
         }
     }
 }
@@ -53,5 +57,23 @@ fun Greeting(name: String) {
 fun DefaultPreview() {
     MyApplicationTheme {
         Greeting("Android")
+    }
+}
+
+@Composable
+private fun WeatherApp() {
+    val navController = rememberNavController()
+    NavHost(navController, startDestination = NavigationKeys.Route.WEATHER_SEARCH) {
+        composable(route = NavigationKeys.Route.WEATHER_SEARCH) {
+            WeatherSearchDestination(navController)
+        }
+        composable(
+            route = NavigationKeys.Route.WEATHER_DETAIL,
+            arguments = listOf(navArgument(NavigationKeys.Arg.WEATHER_ID) {
+                type = NavType.StringType
+            })
+        ) {
+           // FoodCategoryDetailsDestination()
+        }
     }
 }

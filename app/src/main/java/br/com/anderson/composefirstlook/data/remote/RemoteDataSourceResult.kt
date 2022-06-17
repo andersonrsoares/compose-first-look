@@ -1,13 +1,13 @@
 package br.com.anderson.composefirstlook.data.remote
 
-sealed class RemoteDataSourceResult<T>(val data: T? = null, val error:RemoteDataSourceError? = null) {
-    class Success<T>(data: T): RemoteDataSourceResult<T>(data)
-    class Error<T>(data: T? = null, error: RemoteDataSourceError?): RemoteDataSourceResult<T>(data, error)
+sealed class RemoteDataSourceResult<T> {
+    class Success<T>(val data: T): RemoteDataSourceResult<T>()
+    class Error<T>(val error: RemoteDataSourceError): RemoteDataSourceResult<T>()
 }
 
-sealed class RemoteDataSourceError(val error: String? = null) {
+sealed class RemoteDataSourceError {
     object NetworkError: RemoteDataSourceError()
     object Unauthorized: RemoteDataSourceError()
     object NotFound: RemoteDataSourceError()
-    class General(error: String?): RemoteDataSourceError(error)
+    class General(val error: String?): RemoteDataSourceError()
 }

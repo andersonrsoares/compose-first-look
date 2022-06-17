@@ -17,7 +17,7 @@ class WeatherRepository @Inject constructor(
     private val weatherRemoteDataSource: IWeatherRemoteDataSource
 ) : IWeatherRepository {
 
-    override suspend fun fetchWeatherByCity(cityName: String): Flow<DataState<Weather>> {
+    override fun fetchWeatherByCity(cityName: String): Flow<DataState<Weather>> {
         return flow {
 
             emit(DataState.Loading())

@@ -1,10 +1,8 @@
 package br.com.anderson.composefirstlook.domain
 
-import br.com.anderson.composefirstlook.data.remote.RemoteDataSourceError
 
-
-sealed class DataState<T>(val data: T? = null, val error: String? = null) {
-    class Success<T>(data: T): DataState<T>(data)
+sealed class DataState<T>() {
+    class Success<T>(val data: T): DataState<T>()
     class Loading<T>: DataState<T>()
-    class Failure<T>(error: String?): DataState<T>(null, error)
+    class Failure<T>(val error: String?): DataState<T>()
 }

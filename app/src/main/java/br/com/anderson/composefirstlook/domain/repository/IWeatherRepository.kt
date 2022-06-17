@@ -5,5 +5,5 @@ import br.com.anderson.composefirstlook.domain.model.Weather
 import kotlinx.coroutines.flow.Flow
 
 interface IWeatherRepository {
-    suspend fun fetchWeatherByCity(cityName: String): Flow<DataState<Weather>>
+    fun fetchWeatherByCity(cityName: String): Flow<DataState<Weather>>
 }
