@@ -6,8 +6,8 @@ sealed class RemoteDataSourceResult<T> {
 }
 
 sealed class RemoteDataSourceError {
-    object NetworkError: RemoteDataSourceError()
-    object Unauthorized: RemoteDataSourceError()
-    object NotFound: RemoteDataSourceError()
-    class General(val error: String?): RemoteDataSourceError()
+    object NetworkError : RemoteDataSourceError()
+    class Unauthorized(var message: String): RemoteDataSourceError()
+    class NotFound(var message: String): RemoteDataSourceError()
+    object UnknownError: RemoteDataSourceError()
 }

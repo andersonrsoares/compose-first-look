@@ -19,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import br.com.anderson.composefirstlook.presentation.navigation.NavigationKeys
 import br.com.anderson.composefirstlook.presentation.navigation.NavigationScreen
+import br.com.anderson.composefirstlook.presentation.weather_detail.CityWeatherHistoryDestination
 import br.com.anderson.composefirstlook.presentation.weather_detail.WeatherDetailDestination
 import br.com.anderson.composefirstlook.presentation.weather_search.WeatherSearchDestination
 
@@ -54,6 +55,11 @@ private fun WeatherApp() {
         composable(route = NavigationScreen.WeatherSearch.route) {
             WeatherSearchDestination(WeatherNavHostController.navController)
         }
+
+        composable(route = NavigationScreen.WeatherHistory.route) {
+            CityWeatherHistoryDestination()
+        }
+        
         composable(
             route =  "${NavigationScreen.WeatherDetail.route}/{${NavigationKeys.Arg.CITY_NAME}}" ,
             arguments = listOf(navArgument(NavigationKeys.Arg.CITY_NAME) {

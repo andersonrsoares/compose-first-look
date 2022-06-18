@@ -1,12 +1,13 @@
-package br.com.anderson.composefirstlook.data.entity
+package br.com.anderson.composefirstlook.domain.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
-data class WeatherEntity(
+@Parcelize
+data class CityWeather(
     var description: String = "",
     var urlIcon: String = "",
     var temperature: Double = 0.0,
     var city: String = "",
     var date: Long = 0
-)
+) : Parcelable

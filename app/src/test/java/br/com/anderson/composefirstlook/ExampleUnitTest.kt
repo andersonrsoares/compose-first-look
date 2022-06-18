@@ -1,7 +1,5 @@
 package br.com.anderson.composefirstlook
 
-import br.com.anderson.composefirstlook.domain.model.Weather
-import br.com.anderson.composefirstlook.presentation.weather_detail.formatDate
 import org.junit.Test
 
 import org.junit.Assert.*

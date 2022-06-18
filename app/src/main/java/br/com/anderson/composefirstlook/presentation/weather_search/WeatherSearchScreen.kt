@@ -78,7 +78,9 @@ private fun WeatherSearchScreenBody() {
                 InputTextContent()
                 Spacer(modifier = Modifier
                     .height(20.dp))
-                HistoryButton()
+                HistoryButton {
+                    WeatherNavHostController.navController.navigate(NavigationScreen.WeatherHistory.route)
+                }
             }
         }
     }
@@ -115,21 +117,25 @@ private fun InputTextContent() {
         val textState = remember { mutableStateOf(TextFieldValue()) }
         TextField(
             modifier = Modifier
-                .height(50.dp)
+                .height(55.dp)
                 .background(
                     shape = RoundedCornerShape(topStart = 12.dp, bottomStart = 12.dp),
                     color = Color.White
                 ),
+            placeholder = {
+                Text(text = stringResource(R.string.enter_city_name),
+                    color = TextColor)
+            },
             maxLines = 1,
             singleLine = true,
             colors = TextFieldDefaults.textFieldColors(
-                textColor = MaterialTheme.colors.onSecondary,
+                textColor = TextColor,
                 disabledTextColor = Color.Transparent,
                 backgroundColor = Color.Transparent,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,
-                cursorColor = MaterialTheme.colors.onSecondary
+                cursorColor = TextColor
 
             ),
             value = textState.value,
@@ -140,7 +146,7 @@ private fun InputTextContent() {
             .width(10.dp))
 
         RegistrationButton {
-            WeatherNavHostController.navController.navigate("${NavigationScreen.WeatherDetail.route}/dublin}")
+            WeatherNavHostController.navController.navigate("${NavigationScreen.WeatherDetail.route}/${textState.component1().text}")
         }
     }
 }
@@ -150,7 +156,7 @@ private fun InputTextContent() {
 private fun RegistrationButton(onClick: () -> Unit={}) {
     Button(modifier = Modifier
         .width(70.dp)
-        .height(50.dp),
+        .height(55.dp),
         shape = RoundedCornerShape(topEnd = 12.dp, bottomEnd = 12.dp),
         colors = ButtonDefaults
             .buttonColors(Color.White),

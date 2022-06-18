@@ -4,6 +4,6 @@ import br.com.anderson.composefirstlook.data.remote.dto.WeatherContentDto
 import br.com.anderson.composefirstlook.data.remote.RemoteDataSourceResult
 
 
-interface IWeatherRemoteDataSource {
+interface ICityWeatherRemoteDataSource {
     suspend fun findWeatherByCity(cityName: String) : RemoteDataSourceResult<WeatherContentDto>
 }

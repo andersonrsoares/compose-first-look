@@ -21,8 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import br.com.anderson.composefirstlook.R;
-import br.com.anderson.composefirstlook.domain.model.Weather
+import br.com.anderson.composefirstlook.domain.model.CityWeather
 import br.com.anderson.composefirstlook.presentation.UiState
+import br.com.anderson.composefirstlook.presentation.WeatherNavHostController
 import br.com.anderson.composefirstlook.ui.theme.BackgroundColor1
 import br.com.anderson.composefirstlook.ui.theme.BackgroundColor2
 import br.com.anderson.composefirstlook.ui.theme.CardBackgroundColor
@@ -32,13 +33,11 @@ import coil.compose.AsyncImage
 fun WeatherDetailDestination(cityName:String?) {
     WeatherDetailScreen(cityName)
 }
-private lateinit var viewModel: WeatherViewModel
-
 
 @Composable
 fun WeatherDetailScreen(cityName: String?) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
-    viewModel = hiltViewModel()
+    val viewModel:WeatherViewModel = hiltViewModel()
     // Listen for side effects from the VM
 
     val weatherState by viewModel.fetchWeatherFlow.collectAsState(initial = UiState.Loading())
@@ -52,14 +51,34 @@ fun WeatherDetailScreen(cityName: String?) {
     ) {
         WeatherDetailBody(weatherState)
     }
-
 }
+
+
+@Composable
+fun CityWeatherHistoryDestination() {
+    val scaffoldState: ScaffoldState = rememberScaffoldState()
+    val viewModel:WeatherViewModel = hiltViewModel()
+    // Listen for side effects from the VM
+
+    val weatherState by viewModel.fetchWeatherFlow.collectAsState(initial = UiState.Loading())
+
+    LaunchedEffect(true) {
+        viewModel.getCityWeatherHistory()
+    }
+
+    Scaffold(
+        scaffoldState = scaffoldState,
+    ) {
+        WeatherDetailBody(weatherState)
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable
 fun WeatherDetailBody(
-    weatherState: UiState<List<Weather>> =
-        UiState.Success(listOf(Weather(
+    weatherState: UiState<List<CityWeather>> =
+        UiState.Success(listOf(CityWeather(
             "good",
             "http://openweathermap.org/img/wn/02d@2x.png",
             temperature = 28.7,
@@ -81,15 +100,24 @@ fun WeatherDetailBody(
 
         Column() {
             Box(Modifier.padding(15.dp)) {
-                Icon(
-                    modifier = Modifier
-                        .width(24.dp)
-                        .height(24.dp)
-                        .rotate(180f),
-                    painter = painterResource(id = R.drawable.arrow),
-                    contentDescription = null,
-                    tint = Color.White
-                )
+                Button(
+                    elevation = null,
+                    colors = ButtonDefaults
+                        .buttonColors(Color.Transparent),
+                    onClick = {
+                        WeatherNavHostController.navController.popBackStack()
+                }) {
+                    Icon(
+                        modifier = Modifier
+                            .width(24.dp)
+                            .height(24.dp)
+                            .rotate(180f),
+                        painter = painterResource(id = R.drawable.arrow),
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                }
+
             }
             Box(modifier = Modifier.padding(20.dp)) {
                 when(weatherState) {
@@ -97,7 +125,8 @@ fun WeatherDetailBody(
                     is UiState.Success -> {
                         WeatherList(weatherItems = weatherState.data.orEmpty())
                     }
-                    is UiState.Failure -> ErrorMessage(weatherState.error)
+                    is UiState.Failure -> ShowErrorMessage(weatherState.error)
+                    is UiState.Empty -> ShowMessage(weatherState.message)
                 }
             }
         }
@@ -105,7 +134,7 @@ fun WeatherDetailBody(
 }
 @Composable
 fun WeatherList(
-    weatherItems: List<Weather> = arrayListOf()
+    weatherItems: List<CityWeather> = arrayListOf()
 ) {
     LazyColumn(
         contentPadding = PaddingValues(bottom = 16.dp)
@@ -171,13 +200,28 @@ private fun LoadingBar() {
 }
 
 @Composable
-private fun ErrorMessage(error:String) {
+private fun ShowMessage(error:String) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
     ) {
         Text(color = Color.White,
             modifier = Modifier.align(Alignment.Center),
+            textAlign = TextAlign.Center,
+            fontSize = 30.sp,
+            text = error)
+    }
+}
+
+@Composable
+private fun ShowErrorMessage(error:String) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Text(color = Color.White,
+            modifier = Modifier.align(Alignment.Center),
+            textAlign = TextAlign.Center,
             fontSize = 30.sp,
             text = error)
     }
