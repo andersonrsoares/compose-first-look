@@ -51,11 +51,11 @@ object WeatherNavHostController {
 private fun WeatherApp() {
     WeatherNavHostController.navController = rememberNavController()
     NavHost(WeatherNavHostController.navController, startDestination = NavigationScreen.WeatherSearch.route) {
-        composable(route = "${NavigationScreen.WeatherSearch.route}/{${NavigationKeys.Arg.CITY_NAME}}" ) {
+        composable(route = NavigationScreen.WeatherSearch.route) {
             WeatherSearchDestination(WeatherNavHostController.navController)
         }
         composable(
-            route = NavigationScreen.WeatherDetail.route,
+            route =  "${NavigationScreen.WeatherDetail.route}/{${NavigationKeys.Arg.CITY_NAME}}" ,
             arguments = listOf(navArgument(NavigationKeys.Arg.CITY_NAME) {
                 type = NavType.StringType
                 defaultValue = ""

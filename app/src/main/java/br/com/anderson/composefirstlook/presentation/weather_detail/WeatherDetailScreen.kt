@@ -30,33 +30,13 @@ import coil.compose.AsyncImage
 
 @Composable
 fun WeatherDetailDestination(cityName:String?) {
-    WeatherDetailScreen()
+    WeatherDetailScreen(cityName)
 }
 private lateinit var viewModel: WeatherViewModel
 
-@Composable
-private fun WeatherDetailScreen(
-    onNavigationRequested: (itemId: String) -> Unit
-) {
-    viewModel = hiltViewModel()
-    val scaffoldState: ScaffoldState = rememberScaffoldState()
-    // Listen for side effects from the VM
-
-    LaunchedEffect(true) {
-
-    }
-
-    Scaffold(
-        scaffoldState = scaffoldState
-    ) {
-
-    }
-
-}
-
 
 @Composable
-fun WeatherDetailScreen() {
+fun WeatherDetailScreen(cityName: String?) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     viewModel = hiltViewModel()
     // Listen for side effects from the VM
@@ -64,7 +44,7 @@ fun WeatherDetailScreen() {
     val weatherState by viewModel.fetchWeatherFlow.collectAsState(initial = UiState.Loading())
 
     LaunchedEffect(true) {
-        viewModel.onWeatherSearchClick("dublin")
+        viewModel.onWeatherSearchClick(cityName.orEmpty())
     }
 
     Scaffold(
@@ -117,7 +97,7 @@ fun WeatherDetailBody(
                     is UiState.Success -> {
                         WeatherList(weatherItems = weatherState.data.orEmpty())
                     }
-                    is UiState.Failure -> LoadingBar()
+                    is UiState.Failure -> ErrorMessage(weatherState.error)
                 }
             }
         }
@@ -135,20 +115,19 @@ fun WeatherList(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
-                    .clip(RoundedCornerShape(20.dp))
+                    .clip(RoundedCornerShape(15.dp))
                     .background(CardBackgroundColor)
             ) {
                 Box(modifier = Modifier
-                    .padding(15.dp)
+                    .padding(12.dp)
                     .fillMaxSize()
-                    .background(Color.Red)
                 ) {
                     Row {
                         AsyncImage(
                             modifier = Modifier
-                                .width(30.dp)
-                                .height(30.dp),
-                            contentScale = ContentScale.Fit,
+                                .width(40.dp)
+                                .height(40.dp),
+                            contentScale = ContentScale.FillBounds,
                             model = item.urlIcon,
                             contentDescription = null
                         )
@@ -167,7 +146,7 @@ fun WeatherList(
 
                     Text(color = Color.White,
                         modifier = Modifier.align(Alignment.Center),
-                        fontSize = 40.sp,
+                        fontSize = 100.sp,
                         text = item.formatTemperature())
 
                     Text(color = Color.White,
@@ -188,5 +167,18 @@ private fun LoadingBar() {
         modifier = Modifier.fillMaxSize()
     ) {
         CircularProgressIndicator(color = Color.White)
+    }
+}
+
+@Composable
+private fun ErrorMessage(error:String) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Text(color = Color.White,
+            modifier = Modifier.align(Alignment.Center),
+            fontSize = 30.sp,
+            text = error)
     }
 }

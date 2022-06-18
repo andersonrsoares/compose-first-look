@@ -22,12 +22,12 @@ class WeatherViewModel @Inject constructor(
 
 
     fun onWeatherSearchClick(cityName: String) {
-        weatherRepository.fetchWeatherByCity("dublin")
+        weatherRepository.fetchWeatherByCity(cityName)
             .onEach {
                 when(it) {
                     is DataState.Success -> _fetchWeatherFlow.value  = UiState.Success(listOf(it.data))
                     is DataState.Loading -> _fetchWeatherFlow.value  = UiState.Loading()
-                    is DataState.Failure -> _fetchWeatherFlow.value  = UiState.Failure(it.error)
+                    is DataState.Failure -> _fetchWeatherFlow.value  = UiState.Failure(it.error.orEmpty())
                 }
         }.launchIn(viewModelScope)
     }
