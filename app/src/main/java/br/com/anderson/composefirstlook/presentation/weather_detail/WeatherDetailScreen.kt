@@ -83,7 +83,13 @@ fun WeatherDetailBody(
             "http://openweathermap.org/img/wn/02d@2x.png",
             temperature = 28.7,
             "curitiba",
-            date = 1655568638L)))
+            date = 1655568638L),
+            CityWeather(
+                "good",
+                "http://openweathermap.org/img/wn/02d@2x.png",
+                temperature = 28.7,
+                "curitiba",
+                date = 1655568638L)))
 ) {
     Box(
         Modifier
@@ -119,7 +125,7 @@ fun WeatherDetailBody(
                 }
 
             }
-            Box(modifier = Modifier.padding(20.dp)) {
+            Box(modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 5.dp, bottom = 5.dp)) {
                 when(weatherState) {
                     is UiState.Loading -> LoadingBar()
                     is UiState.Success -> {
@@ -137,7 +143,7 @@ fun WeatherList(
     weatherItems: List<CityWeather> = arrayListOf()
 ) {
     LazyColumn(
-        contentPadding = PaddingValues(bottom = 16.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(weatherItems) { item ->
             Box(

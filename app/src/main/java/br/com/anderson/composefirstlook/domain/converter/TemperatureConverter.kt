@@ -1,7 +1,12 @@
 package br.com.anderson.composefirstlook.domain.converter
 
-object TemperatureConverter {
-    fun kelvinToCelsius(temperature: Double) : Double {
+import javax.inject.Inject
+
+
+class TemperatureConverter @Inject constructor() : ITemperatureConverter {
+
+    override fun convert(temperature: Double) : Double {
        return (temperature  - 273.15F)
     }
+
 }

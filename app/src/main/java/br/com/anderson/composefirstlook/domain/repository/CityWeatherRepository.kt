@@ -22,7 +22,8 @@ import javax.inject.Inject
 class CityWeatherRepository @Inject constructor(
     private val dispatcherProvider: DispatcherProvider,
     private val weatherRemoteDataSource: ICityWeatherRemoteDataSource,
-    private val weatherLocalDataSource: ICityWeatherLocalDataSource
+    private val weatherLocalDataSource: ICityWeatherLocalDataSource,
+    private val temperatureConverter: TemperatureConverter
 ) : ICityWeatherRepository {
 
     override fun fetchWeatherByCity(cityName: String): Flow<DataState<CityWeather>> {
@@ -33,9 +34,7 @@ class CityWeatherRepository @Inject constructor(
             emit(when(val result = weatherRemoteDataSource.findWeatherByCity(cityName)) {
                 is RemoteDataSourceResult.Success -> {
                     weatherLocalDataSource.addCityWeather(result.data.toCityWeatherEntity())
-                    DataState.Success(result.data.toCityWeather().apply {
-                        this.temperature = TemperatureConverter.kelvinToCelsius(temperature)
-                    })
+                    DataState.Success(convertTemperature(result.data.toCityWeather()))
                 }
 
                 is RemoteDataSourceResult.Error -> DataState.Failure(when(result.error) {
@@ -52,10 +51,14 @@ class CityWeatherRepository @Inject constructor(
         return flow {
             emit(DataState.Loading())
             emit(DataState.Success(weatherLocalDataSource.getLastFiveCitiesSearched().map {
-                it.toCityWeather().apply {
-                    this.temperature = TemperatureConverter.kelvinToCelsius(temperature)
-                }
+                convertTemperature(it.toCityWeather())
             }))
         }.flowOn(dispatcherProvider.io)
+    }
+
+    private fun convertTemperature(cityWeather: CityWeather) : CityWeather {
+        return cityWeather.apply {
+            temperature = temperatureConverter.convert(temperature)
+        }
     }
 }
