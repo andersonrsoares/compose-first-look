@@ -1,6 +1,6 @@
 package br.com.anderson.composefirstlook.data.remote.datasource
 
-import br.com.anderson.composefirstlook.data.dto.WeatherContentDto
+import br.com.anderson.composefirstlook.data.remote.dto.WeatherContentDto
 import br.com.anderson.composefirstlook.data.remote.RemoteDataSourceError
 import br.com.anderson.composefirstlook.data.remote.RemoteDataSourceResult
 import br.com.anderson.composefirstlook.data.remote.network.WeatherService

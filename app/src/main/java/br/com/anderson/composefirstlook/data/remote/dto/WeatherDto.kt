@@ -1,4 +1,4 @@
-package br.com.anderson.composefirstlook.data.dto
+package br.com.anderson.composefirstlook.data.remote.dto
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -10,7 +10,7 @@ data class WeatherContentDto(
     @Json(name="cod")
     var cod: Int = 0,
     @Json(name="dt")
-    var dt: Int = 0,
+    var dt: Long = 0,
     @Json(name="id")
     var id: Int = 0,
     @Json(name="main")

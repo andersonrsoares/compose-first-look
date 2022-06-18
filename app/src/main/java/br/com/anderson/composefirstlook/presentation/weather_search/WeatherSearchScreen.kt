@@ -21,9 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import br.com.anderson.composefirstlook.presentation.NavigationKeys
 import br.com.anderson.composefirstlook.R;
 import br.com.anderson.composefirstlook.presentation.WeatherNavHostController
+import br.com.anderson.composefirstlook.presentation.navigation.NavigationKeys
+import br.com.anderson.composefirstlook.presentation.navigation.NavigationScreen
 import br.com.anderson.composefirstlook.presentation.weather_detail.WeatherViewModel
 import br.com.anderson.composefirstlook.ui.theme.*
 
@@ -32,7 +33,7 @@ import br.com.anderson.composefirstlook.ui.theme.*
 fun WeatherSearchDestination(navController: NavHostController) {
     WeatherSearchScreen(
         onNavigationRequested = { itemId ->
-            navController.navigate("${NavigationKeys.Navigation.WEATHER_DETAIL}/${itemId}")
+            navController.navigate("${NavigationScreen.WeatherDetail.route}/${itemId}")
         })
 }
 
@@ -139,7 +140,7 @@ private fun InputTextContent() {
             .width(10.dp))
 
         RegistrationButton {
-            WeatherNavHostController.navController.navigate("${NavigationKeys.Navigation.WEATHER_DETAIL}/${textState.component1().text}")
+            WeatherNavHostController.navController.navigate("${NavigationScreen.WeatherDetail.route}/dublin}")
         }
     }
 }

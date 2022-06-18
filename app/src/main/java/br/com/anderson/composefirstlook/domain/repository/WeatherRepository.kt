@@ -4,6 +4,7 @@ package br.com.anderson.composefirstlook.domain.repository
 import br.com.anderson.composefirstlook.data.remote.RemoteDataSourceResult
 import br.com.anderson.composefirstlook.data.remote.datasource.IWeatherRemoteDataSource
 import br.com.anderson.composefirstlook.domain.DataState
+import br.com.anderson.composefirstlook.domain.converter.TemperatureConverter
 import br.com.anderson.composefirstlook.domain.model.Weather
 import br.com.anderson.composefirstlook.util.DispatcherProvider
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +24,9 @@ class WeatherRepository @Inject constructor(
             emit(DataState.Loading())
 
             emit(when(val result = weatherRemoteDataSource.findWeatherByCity(cityName)) {
-                is RemoteDataSourceResult.Success -> DataState.Success(result.data.toWeather())
+                is RemoteDataSourceResult.Success -> DataState.Success(result.data.toWeather().apply {
+                    this.temperature = TemperatureConverter.kelvinToCelsius(temperature)
+                })
                 is RemoteDataSourceResult.Error -> DataState.Failure("error")
             })
 

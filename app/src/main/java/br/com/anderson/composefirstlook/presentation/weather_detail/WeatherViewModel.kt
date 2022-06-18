@@ -17,7 +17,7 @@ class WeatherViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    private val _fetchWeatherFlow = MutableStateFlow<UiState<Weather>>(UiState.Loading())
+    private val _fetchWeatherFlow = MutableStateFlow<UiState<List<Weather>>>(UiState.Loading())
     val fetchWeatherFlow = _fetchWeatherFlow.asSharedFlow()
 
 
@@ -25,7 +25,7 @@ class WeatherViewModel @Inject constructor(
         weatherRepository.fetchWeatherByCity("dublin")
             .onEach {
                 when(it) {
-                    is DataState.Success -> _fetchWeatherFlow.value  = UiState.Success(it.data)
+                    is DataState.Success -> _fetchWeatherFlow.value  = UiState.Success(listOf(it.data))
                     is DataState.Loading -> _fetchWeatherFlow.value  = UiState.Loading()
                     is DataState.Failure -> _fetchWeatherFlow.value  = UiState.Failure(it.error)
                 }

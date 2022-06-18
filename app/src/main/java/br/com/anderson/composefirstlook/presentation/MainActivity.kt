@@ -17,6 +17,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import br.com.anderson.composefirstlook.presentation.navigation.NavigationKeys
+import br.com.anderson.composefirstlook.presentation.navigation.NavigationScreen
 import br.com.anderson.composefirstlook.presentation.weather_detail.WeatherDetailDestination
 import br.com.anderson.composefirstlook.presentation.weather_search.WeatherSearchDestination
 
@@ -48,17 +50,19 @@ object WeatherNavHostController {
 @Composable
 private fun WeatherApp() {
     WeatherNavHostController.navController = rememberNavController()
-    NavHost(WeatherNavHostController.navController, startDestination = NavigationKeys.Route.WEATHER_SEARCH) {
-        composable(route = NavigationKeys.Route.WEATHER_SEARCH) {
+    NavHost(WeatherNavHostController.navController, startDestination = NavigationScreen.WeatherSearch.route) {
+        composable(route = "${NavigationScreen.WeatherSearch.route}/{${NavigationKeys.Arg.CITY_NAME}}" ) {
             WeatherSearchDestination(WeatherNavHostController.navController)
         }
         composable(
-            route = NavigationKeys.Route.WEATHER_DETAIL,
+            route = NavigationScreen.WeatherDetail.route,
             arguments = listOf(navArgument(NavigationKeys.Arg.CITY_NAME) {
                 type = NavType.StringType
+                defaultValue = ""
+                nullable = true
             })
-        ) {
-            WeatherDetailDestination(WeatherNavHostController.navController)
+        ) { entry ->
+            WeatherDetailDestination(entry.arguments?.getString(NavigationKeys.Arg.CITY_NAME))
         }
     }
 }
