@@ -2,9 +2,8 @@ package br.com.anderson.composefirstlook.domain.repository
 
 
 import br.com.anderson.composefirstlook.data.local.datasource.ICityWeatherLocalDataSource
-import br.com.anderson.composefirstlook.data.local.entity.CityWeatherEntity
-import br.com.anderson.composefirstlook.data.remote.RemoteDataSourceError
-import br.com.anderson.composefirstlook.data.remote.RemoteDataSourceResult
+import br.com.anderson.composefirstlook.data.remote.datasource.RemoteDataSourceError
+import br.com.anderson.composefirstlook.data.remote.datasource.RemoteDataSourceResult
 import br.com.anderson.composefirstlook.data.remote.datasource.ICityWeatherRemoteDataSource
 import br.com.anderson.composefirstlook.domain.DataState
 import br.com.anderson.composefirstlook.domain.FailureReason
@@ -16,7 +15,6 @@ import br.com.anderson.composefirstlook.util.DispatcherProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class CityWeatherRepository @Inject constructor(

@@ -1,4 +1,4 @@
-package br.com.anderson.composefirstlook.data.remote
+package br.com.anderson.composefirstlook.data.remote.datasource
 
 
 import kotlinx.coroutines.TimeoutCancellationException
@@ -8,13 +8,6 @@ import java.io.IOException
 import java.net.UnknownHostException
 import java.util.concurrent.TimeoutException
 
-fun <T> Response<T>.transformToRemoteDataSourceResult() : RemoteDataSourceResult<T> {
-    return runCatching {
-        this.handleResponse()
-    }.getOrElse {
-        RemoteDataSourceResult.Error(it.handleException())
-    }
-}
 
 fun <T> Response<T>.handleResponse() : RemoteDataSourceResult<T> {
     return if (this.isSuccessful) {
@@ -48,5 +41,15 @@ fun <T> Response<T>.extractMessage() : String {
         JSONObject(this.errorBody()?.string()!!).getString("message")
     } catch (e:Exception){
         this.errorBody()?.string() ?: ""
+    }
+}
+
+suspend fun <T> safeApiCall(
+    apiCall: suspend () -> Response<T>
+) : RemoteDataSourceResult<T> {
+    return runCatching {
+        apiCall.invoke().handleResponse()
+    }.getOrElse {
+        RemoteDataSourceResult.Error(it.handleException())
     }
 }
