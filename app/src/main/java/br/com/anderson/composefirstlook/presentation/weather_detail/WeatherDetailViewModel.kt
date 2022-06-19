@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
-class WeatherViewModel @Inject constructor(
+class WeatherDetailViewModel @Inject constructor(
     private val weatherRepository: ICityWeatherRepository,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
@@ -46,7 +46,6 @@ class WeatherViewModel @Inject constructor(
                         it.data.isNotEmpty() -> UiState.Success(it.data)
                         else -> UiState.Empty(context.getString(R.string.empty_city_weather_history))
                     }
-
                 }
             }.launchIn(viewModelScope)
     }

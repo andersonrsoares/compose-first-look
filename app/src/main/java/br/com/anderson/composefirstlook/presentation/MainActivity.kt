@@ -1,15 +1,9 @@
 package br.com.anderson.composefirstlook.presentation
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import br.com.anderson.composefirstlook.presentation.weather_detail.WeatherViewModel
 import br.com.anderson.composefirstlook.ui.theme.MyApplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.navigation.NavType
@@ -30,36 +24,24 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyApplicationTheme {
-                // A surface container using the 'background' color from the theme
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = MaterialTheme.colors.background
-//                ) {
-//                    Greeting("Android")
-//                }
                 WeatherApp()
             }
         }
     }
 }
 
-object WeatherNavHostController {
-    @SuppressLint("StaticFieldLeak")
-    lateinit var navController: NavHostController
-}
-
 @Composable
 private fun WeatherApp() {
-    WeatherNavHostController.navController = rememberNavController()
-    NavHost(WeatherNavHostController.navController, startDestination = NavigationScreen.WeatherSearch.route) {
+    val navController = rememberNavController()
+    NavHost(navController, startDestination = NavigationScreen.WeatherSearch.route) {
         composable(route = NavigationScreen.WeatherSearch.route) {
-            WeatherSearchDestination(WeatherNavHostController.navController)
+            WeatherSearchDestination(navController)
         }
 
         composable(route = NavigationScreen.WeatherHistory.route) {
-            CityWeatherHistoryDestination()
+            CityWeatherHistoryDestination(navController)
         }
-        
+
         composable(
             route =  "${NavigationScreen.WeatherDetail.route}/{${NavigationKeys.Arg.CITY_NAME}}" ,
             arguments = listOf(navArgument(NavigationKeys.Arg.CITY_NAME) {
@@ -68,7 +50,8 @@ private fun WeatherApp() {
                 nullable = true
             })
         ) { entry ->
-            WeatherDetailDestination(entry.arguments?.getString(NavigationKeys.Arg.CITY_NAME))
+            WeatherDetailDestination(navController,
+                entry.arguments?.getString(NavigationKeys.Arg.CITY_NAME))
         }
     }
 }

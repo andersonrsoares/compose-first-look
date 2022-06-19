@@ -18,41 +18,27 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import br.com.anderson.composefirstlook.R;
-import br.com.anderson.composefirstlook.presentation.WeatherNavHostController
-import br.com.anderson.composefirstlook.presentation.navigation.NavigationKeys
 import br.com.anderson.composefirstlook.presentation.navigation.NavigationScreen
-import br.com.anderson.composefirstlook.presentation.weather_detail.WeatherViewModel
 import br.com.anderson.composefirstlook.ui.theme.*
 
 
 @Composable
 fun WeatherSearchDestination(navController: NavHostController) {
-    WeatherSearchScreen(
-        onNavigationRequested = { itemId ->
-            navController.navigate("${NavigationScreen.WeatherDetail.route}/${itemId}")
-        })
-}
-
-@Composable
-private fun WeatherSearchScreen(
-    onNavigationRequested: (itemId: String) -> Unit
-) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
 
     Scaffold(
         scaffoldState = scaffoldState
     ) {
-        WeatherSearchScreenBody()
+        WeatherSearchScreen(navController)
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-private fun WeatherSearchScreenBody() {
+private fun WeatherSearchScreen(
+    navController: NavHostController
+) {
     Box(
         Modifier
             .fillMaxHeight()
@@ -71,17 +57,27 @@ private fun WeatherSearchScreenBody() {
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
         ){
-            WeatherSearchScreenCompose{
-                ImageLogo()
-                Spacer(modifier = Modifier
-                    .height(20.dp))
-                InputTextContent()
-                Spacer(modifier = Modifier
-                    .height(20.dp))
-                HistoryButton {
-                    WeatherNavHostController.navController.navigate(NavigationScreen.WeatherHistory.route)
-                }
-            }
+            WeatherSearchScreenBody(navController)
+        }
+    }
+}
+
+@Composable
+private fun WeatherSearchScreenBody(
+    navController: NavHostController
+) {
+    WeatherSearchScreenCompose {
+        ImageLogo()
+        Spacer(modifier = Modifier
+            .height(20.dp))
+        InputTextContent { search ->
+
+            navController.navigate("${NavigationScreen.WeatherDetail.route}/${search}")
+        }
+        Spacer(modifier = Modifier
+            .height(20.dp))
+        HistoryButton {
+            navController.navigate(NavigationScreen.WeatherHistory.route)
         }
     }
 }
@@ -112,7 +108,7 @@ private fun ImageLogo() {
 }
 
 @Composable
-private fun InputTextContent() {
+private fun InputTextContent(onClick: (text:String) -> Unit={}) {
     Row {
         val textState = remember { mutableStateOf(TextFieldValue()) }
         TextField(
@@ -145,27 +141,20 @@ private fun InputTextContent() {
         Spacer(modifier = Modifier
             .width(10.dp))
 
-        RegistrationButton {
-            WeatherNavHostController.navController.navigate("${NavigationScreen.WeatherDetail.route}/${textState.component1().text}")
+
+        Button(modifier = Modifier
+            .width(70.dp)
+            .height(55.dp),
+            shape = RoundedCornerShape(topEnd = 12.dp, bottomEnd = 12.dp),
+            colors = ButtonDefaults
+                .buttonColors(Color.White),
+            onClick = { onClick(textState.component1().text) }) {
+            Icon(
+                painter = painterResource(id = R.drawable.arrow),
+                contentDescription = null,
+                tint = IconColor
+            )
         }
-    }
-}
-
-
-@Composable
-private fun RegistrationButton(onClick: () -> Unit={}) {
-    Button(modifier = Modifier
-        .width(70.dp)
-        .height(55.dp),
-        shape = RoundedCornerShape(topEnd = 12.dp, bottomEnd = 12.dp),
-        colors = ButtonDefaults
-            .buttonColors(Color.White),
-        onClick = { onClick() }) {
-        Icon(
-            painter = painterResource(id = R.drawable.arrow),
-            contentDescription = null,
-            tint = IconColor
-        )
     }
 }
 
@@ -182,15 +171,5 @@ private fun HistoryButton(onClick: () -> Unit={}) {
         Box(modifier = Modifier.padding(start = 15.dp, end = 15.dp, top = 5.dp, bottom = 5.dp)) {
             Text(color = Color.White, text = stringResource(id = R.string.view_history).uppercase())
         }
-    }
-}
-
-@Composable
-private fun LoadingBar() {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        CircularProgressIndicator()
     }
 }

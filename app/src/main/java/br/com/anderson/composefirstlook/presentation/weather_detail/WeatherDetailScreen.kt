@@ -20,24 +20,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import br.com.anderson.composefirstlook.R;
 import br.com.anderson.composefirstlook.domain.model.CityWeather
 import br.com.anderson.composefirstlook.presentation.UiState
-import br.com.anderson.composefirstlook.presentation.WeatherNavHostController
 import br.com.anderson.composefirstlook.ui.theme.BackgroundColor1
 import br.com.anderson.composefirstlook.ui.theme.BackgroundColor2
 import br.com.anderson.composefirstlook.ui.theme.CardBackgroundColor
 import coil.compose.AsyncImage
 
 @Composable
-fun WeatherDetailDestination(cityName:String?) {
-    WeatherDetailScreen(cityName)
+fun WeatherDetailDestination(navController: NavHostController,
+                             cityName:String?) {
+    WeatherDetailScreen(navController, cityName)
 }
 
 @Composable
-fun WeatherDetailScreen(cityName: String?) {
+fun WeatherDetailScreen(navController: NavHostController,
+                        cityName: String?) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
-    val viewModel:WeatherViewModel = hiltViewModel()
+    val viewModel:WeatherDetailViewModel = hiltViewModel()
     // Listen for side effects from the VM
 
     val weatherState by viewModel.fetchWeatherFlow.collectAsState(initial = UiState.Loading())
@@ -49,15 +51,18 @@ fun WeatherDetailScreen(cityName: String?) {
     Scaffold(
         scaffoldState = scaffoldState,
     ) {
-        WeatherDetailBody(weatherState)
+        WeatherDetailBody(
+            navController,
+            weatherState
+        )
     }
 }
 
 
 @Composable
-fun CityWeatherHistoryDestination() {
+fun CityWeatherHistoryDestination(navController: NavHostController) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
-    val viewModel:WeatherViewModel = hiltViewModel()
+    val viewModel:WeatherDetailViewModel = hiltViewModel()
     // Listen for side effects from the VM
 
     val weatherState by viewModel.fetchWeatherFlow.collectAsState(initial = UiState.Loading())
@@ -69,27 +74,17 @@ fun CityWeatherHistoryDestination() {
     Scaffold(
         scaffoldState = scaffoldState,
     ) {
-        WeatherDetailBody(weatherState)
+        WeatherDetailBody(
+            navController,
+            weatherState)
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
 fun WeatherDetailBody(
-    weatherState: UiState<List<CityWeather>> =
-        UiState.Success(listOf(CityWeather(
-            "good",
-            "http://openweathermap.org/img/wn/02d@2x.png",
-            temperature = 28.7,
-            "curitiba",
-            date = 1655568638L),
-            CityWeather(
-                "good",
-                "http://openweathermap.org/img/wn/02d@2x.png",
-                temperature = 28.7,
-                "curitiba",
-                date = 1655568638L)))
+    navController: NavHostController,
+    weatherState: UiState<List<CityWeather>>
 ) {
     Box(
         Modifier
@@ -111,7 +106,7 @@ fun WeatherDetailBody(
                     colors = ButtonDefaults
                         .buttonColors(Color.Transparent),
                     onClick = {
-                        WeatherNavHostController.navController.popBackStack()
+                        navController.popBackStack()
                 }) {
                     Icon(
                         modifier = Modifier
@@ -125,6 +120,7 @@ fun WeatherDetailBody(
                 }
 
             }
+
             Box(modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 5.dp, bottom = 5.dp)) {
                 when(weatherState) {
                     is UiState.Loading -> LoadingBar()
@@ -138,9 +134,22 @@ fun WeatherDetailBody(
         }
     }
 }
+
+
 @Composable
 fun WeatherList(
-    weatherItems: List<CityWeather> = arrayListOf()
+    weatherItems: List<CityWeather> = listOf(CityWeather(
+        "good",
+        "http://openweathermap.org/img/wn/02d@2x.png",
+        temperature = 28.7,
+        "curitiba",
+        date = 1655568638L),
+        CityWeather(
+            "good",
+            "http://openweathermap.org/img/wn/02d@2x.png",
+            temperature = 28.7,
+            "curitiba",
+            date = 1655568638L))
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(12.dp)
