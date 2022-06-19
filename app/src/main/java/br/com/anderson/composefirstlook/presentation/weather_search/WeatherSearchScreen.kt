@@ -18,10 +18,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import br.com.anderson.composefirstlook.R;
+import br.com.anderson.composefirstlook.presentation.UiState
 import br.com.anderson.composefirstlook.presentation.navigation.NavigationScreen
 import br.com.anderson.composefirstlook.ui.theme.*
+import kotlinx.coroutines.flow.*
 
 
 @Composable
@@ -66,13 +69,23 @@ private fun WeatherSearchScreen(
 private fun WeatherSearchScreenBody(
     navController: NavHostController
 ) {
+    val viewModel:WeatherSearchViewModel = hiltViewModel()
+    val validateSearchInput:Flow<UiState<String>> = viewModel.validateSearchInput.receiveAsFlow()
+
+    LaunchedEffect(validateSearchInput) {
+        validateSearchInput.onEach  {
+            if (it is UiState.Success) {
+                 navController.navigate("${NavigationScreen.WeatherDetail.route}/${it.data}")
+            }
+        }.collect()
+    }
+
     WeatherSearchScreenCompose {
         ImageLogo()
         Spacer(modifier = Modifier
             .height(20.dp))
         InputTextContent { search ->
-
-            navController.navigate("${NavigationScreen.WeatherDetail.route}/${search}")
+            viewModel.onSearchClick(search)
         }
         Spacer(modifier = Modifier
             .height(20.dp))
