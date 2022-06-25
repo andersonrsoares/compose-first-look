@@ -1,4 +1,4 @@
-package br.com.anderson.composefirstlook.data.remote
+package br.com.anderson.composefirstlook.data.remote.datasource
 
 sealed class RemoteDataSourceResult<T> {
     class Success<T>(val data: T): RemoteDataSourceResult<T>()
