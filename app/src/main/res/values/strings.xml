@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="enter_city_name">Enter city name</string>
+    <string name="view_history">View History</string>
+    <string name="error_city_weather">An error has occurred, please try again</string>
+    <string name="empty_city_weather_history">There is no city on your history list</string>
 </resources>
