@@ -11,8 +11,6 @@ class CityWeatherRemoteDataSource @Inject constructor(
     ) : ICityWeatherRemoteDataSource {
 
     override suspend fun findWeatherByCity(cityName: String) : RemoteDataSourceResult<WeatherContentDto> {
-        return safeApiCall {
-            service.findWeather(cityName)
-        }
+        return service.findWeather(cityName).await()
     }
 }

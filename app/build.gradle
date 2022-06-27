@@ -15,7 +15,7 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
-
+        buildConfigField "String", "API_KEY", "\"${getApiKey()}\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
@@ -128,4 +128,12 @@ dependencies {
     testImplementation "org.mockito:mockito-core:4.2.0"
     testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
 
+}
+
+
+String getApiKey() {
+    def propFile = rootProject.file("./local.properties")
+    def properties = new Properties()
+    properties.load(new FileInputStream(propFile))
+    return properties['API_KEY']
 }

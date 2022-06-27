@@ -3,11 +3,21 @@ package br.com.anderson.composefirstlook.data.remote.datasource
 
 import kotlinx.coroutines.TimeoutCancellationException
 import org.json.JSONObject
+import retrofit2.Call
 import retrofit2.Response
+import retrofit2.awaitResponse
 import java.io.IOException
 import java.net.UnknownHostException
 import java.util.concurrent.TimeoutException
 
+
+suspend fun <T> Call<T>.await(): RemoteDataSourceResult<T> {
+    return runCatching {
+        this.awaitResponse().handleResponse()
+    }.getOrElse {
+        RemoteDataSourceResult.Error(it.handleException())
+    }
+}
 
 fun <T> Response<T>.handleResponse() : RemoteDataSourceResult<T> {
     return if (this.isSuccessful) {
@@ -41,15 +51,5 @@ fun <T> Response<T>.extractMessage() : String {
         JSONObject(this.errorBody()?.string()!!).getString("message")
     } catch (e:Exception){
         this.errorBody()?.string() ?: ""
-    }
-}
-
-suspend fun <T> safeApiCall(
-    apiCall: suspend () -> Response<T>
-) : RemoteDataSourceResult<T> {
-    return runCatching {
-        apiCall.invoke().handleResponse()
-    }.getOrElse {
-        RemoteDataSourceResult.Error(it.handleException())
     }
 }
