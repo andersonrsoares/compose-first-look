@@ -13,6 +13,6 @@ import retrofit2.http.Query
 interface WeatherService {
 
     @GET("data/2.5/weather")
-    suspend fun findWeather(@Query("q") cityName:String) : Call<WeatherContentDto>
+    suspend fun findWeather(@Query("q") cityName:String) : Response<WeatherContentDto>
 
 }
