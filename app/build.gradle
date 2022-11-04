@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.ManagedVirtualDevice
+
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
@@ -59,6 +61,33 @@ android {
         unitTests {
             returnDefaultValues = true
             includeAndroidResources = true
+        }
+
+        managedDevices {
+            devices {
+                pixel2api30 (ManagedVirtualDevice) {
+                    // Use device profiles you typically see in Android Studio.
+                    device = "Pixel 2"
+                    // Use only API levels 27 and higher.
+                    apiLevel = 30
+                    // To include Google services, use "google".
+                    systemImageSource = "google"
+                }
+                pixel2api33 (ManagedVirtualDevice) {
+                    // Use device profiles you typically see in Android Studio.
+                    device = "Pixel 2"
+                    // Use only API levels 27 and higher.
+                    apiLevel = 33
+                    // To include Google services, use "google".
+                    systemImageSource = "google"
+                }
+            }
+            groups {
+                group1 {
+                    targetDevices.add(devices.pixel2api30)
+                    targetDevices.add(devices.pixel2api33)
+                }
+            }
         }
     }
 
