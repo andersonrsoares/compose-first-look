@@ -38,5 +38,9 @@ jobs:
       run: ./gradlew build
     - name: Unit Test
       run: ./gradlew testDebugUnitTest --stacktrace
+
+    - name: cleanManagedDevices
+      run: ./gradlew  cleanManagedDevices --unused-only
+
     - name: Run Android test
       run: ./gradlew pixel2api33DebugAndroidTest --stacktrace
