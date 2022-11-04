@@ -31,8 +31,8 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v2
 
-    - name: Verify Emulator version
-      run: /Users/runner/Library/Android/sdk/emulator/emulator -version
+   # - name: Verify Emulator version
+    #  run: /Users/runner/Library/Android/sdk/emulator/emulator -version
 
     - name: Build with Gradle
       run: ./gradlew build
