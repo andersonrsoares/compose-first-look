@@ -40,7 +40,7 @@ jobs:
       run: ./gradlew testDebugUnitTest --stacktrace
 
     - name: cleanManagedDevices
-      run: ./gradlew  cleanManagedDevices --unused-only
+      run: ./gradlew  cleanManagedDevices
 
     - name: Run Android test
-      run: ./gradlew pixel2api33DebugAndroidTest --stacktrace
+      run: ./gradlew pixel2api33DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu=\"swiftshader_indirect\" --stacktrace

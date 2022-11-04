@@ -64,6 +64,9 @@ android {
         }
 
         managedDevices {
+            emulatorSnapshots {
+                enableForTestFailures = true
+            }
             devices {
                 pixel2api30 (ManagedVirtualDevice) {
                     // Use device profiles you typically see in Android Studio.
