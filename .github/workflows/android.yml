@@ -39,4 +39,4 @@ jobs:
     - name: Unit Test
       run: ./gradlew testDebugUnitTest --stacktrace
     - name: Run Android test
-      run: ./gradlew group1GroupDebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" --stacktrace
+      run: ./gradlew pixel2api33DebugAndroidTest --stacktrace
