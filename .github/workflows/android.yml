@@ -10,7 +10,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: macOS-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -43,4 +43,4 @@ jobs:
       run: ./gradlew  cleanManagedDevices
 
     - name: Run Android test
-      run: ./gradlew pixel2api33DebugAndroidTest --stacktrace
+      run: ./gradlew pixel2api30DebugAndroidTest --stacktrace
