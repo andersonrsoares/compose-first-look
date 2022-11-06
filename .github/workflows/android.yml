@@ -5,11 +5,12 @@ on:
     branches: [ "develop",  "main" ]
   pull_request:
     branches: [ "develop", "main" ]
+  workflow_dispatch:
 
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -17,15 +18,29 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '11'
-        distribution: 'temurin'
+        distribution: 'adopt'
         cache: gradle
     - name: get API key from GitHub
       env:
         APY_KEY: ${{ secrets.APY_KEY }}
       run: echo APY_KEY=\"$APY_KEY\" > ./local.properties
+      
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v2
+
+   # - name: Verify Emulator version
+    #  run: /Users/runner/Library/Android/sdk/emulator/emulator -version
+
     - name: Build with Gradle
       run: ./gradlew build
     - name: Unit Test
-      run: ./gradlew testDebugUnitTest
+      run: ./gradlew testDebugUnitTest --stacktrace
+
+      #- name: cleanManagedDevices
+      # run: ./gradlew  cleanManagedDevices
+
+    - name: Run Android test
+      run: ./gradlew pixel2api30DebugAndroidTest --stacktrace
