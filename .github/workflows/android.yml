@@ -18,7 +18,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '11'
-        distribution: 'temurin'
+        distribution: 'adopt'
         cache: gradle
     - name: get API key from GitHub
       env:
@@ -39,8 +39,8 @@ jobs:
     - name: Unit Test
       run: ./gradlew testDebugUnitTest --stacktrace
 
-    - name: cleanManagedDevices
-      run: ./gradlew  cleanManagedDevices
+      #- name: cleanManagedDevices
+      # run: ./gradlew  cleanManagedDevices
 
     - name: Run Android test
-      run: ./gradlew pixel2api30DebugAndroidTest --stacktrace
+      run: ./gradlew pixel2api30DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" --stacktrace
