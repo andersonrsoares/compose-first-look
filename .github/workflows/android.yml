@@ -10,7 +10,7 @@ on:
 jobs:
   build:
 
-    runs-on: macOS-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -30,6 +30,9 @@ jobs:
 
     - name: Setup Android SDK
       uses: android-actions/setup-android@v2
+
+   # - name: Verify Emulator version
+    #  run: /Users/runner/Library/Android/sdk/emulator/emulator -version
 
     - name: Build with Gradle
       run: ./gradlew build
