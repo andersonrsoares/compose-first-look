@@ -10,7 +10,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: macOS-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -31,9 +31,6 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v2
 
-   # - name: Verify Emulator version
-    #  run: /Users/runner/Library/Android/sdk/emulator/emulator -version
-
     - name: Build with Gradle
       run: ./gradlew build
     - name: Unit Test
@@ -43,4 +40,4 @@ jobs:
       run: ./gradlew  cleanManagedDevices
 
     - name: Run Android test
-      run: ./gradlew pixel2api33DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu=\"swiftshader_indirect\" --stacktrace
+      run: ./gradlew pixel2api33DebugAndroidTest --stacktrace
